@@ -13,7 +13,7 @@ public class FileDemo {
 			System.out.println(fs.getName());
 	}
 
-	public void showLevel(int level, File f) {
+	public void showLevel(int level) {
 		for (int i = 0; i < level - 1; i++)
 			System.out.print("|-----");
 		System.out.print("|*****");
@@ -32,10 +32,10 @@ public class FileDemo {
 		} else {
 			for (File subf : f.listFiles()) {
 				if (subf.isDirectory()) {
-					showLevel(level, subf);
+					showLevel(level);
 					showFileList(filePath + "\\" + subf.getName(), level);
 				} else {
-					showLevel(level, subf);
+					showLevel(level);
 					System.out.println(subf.getName());
 				}
 			}
