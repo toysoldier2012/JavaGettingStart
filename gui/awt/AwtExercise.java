@@ -9,13 +9,19 @@ public class AwtExercise {
 	TextField tf1 = new TextField();
 	Button b1 = new Button("Show");
 	Button b2 = new Button("Close");
+	Button b3 = new Button("Close");
 	TextArea ta = new TextArea(20, 100);
+	Dialog d = new Dialog(f, "Closing", true);
+	Label l = new Label("You want to exit", Label.CENTER);
 
 	AwtExercise() {
 		init();
 	}
 	
 	public void init() {
+		/*
+		 * Main Frame setting
+		 */
 		f.setBounds(300, 200, 800, 500);
 		f.setLayout(new FlowLayout());
 		f.setVisible(true);
@@ -29,7 +35,25 @@ public class AwtExercise {
 
 		ta.setEditable(false);
 		f.add(ta);
-
+		
+		/*
+		 * Closing Dialog setting
+		 */
+		d.setLayout(new FlowLayout());
+		d.setBounds(400,300,200,100);
+		
+		l.setSize(200, 100);
+		d.add(l);
+		d.add(b3);
+		
+		Event();
+		
+	}
+	
+	/*
+	 * Event
+	 */
+	public void Event() {
 		/*
 		 * Window listener
 		 */
@@ -64,6 +88,12 @@ public class AwtExercise {
 		});
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				d.setVisible(true);
+			}
+		});
+		
+		b3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
@@ -73,6 +103,17 @@ public class AwtExercise {
 		 */
 		tf1.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+					showFlieList(tf1.getText(), 0);
+			}
+		});
+		
+		/*
+		 * Dialog listener
+		 */
+		d.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				d.setVisible(false);
 			}
 		});
 	}
@@ -87,6 +128,10 @@ public class AwtExercise {
 	}
 	public void showFlieList(String filename, int level) {
 		File f = new File(filename);
+		if(!f.exists()) {
+			ta.setText("Wrong file name!");
+			return ;
+		}
 		File[] subFile = f.listFiles();
 		
 		ta.append(f.getName() +"\n");
