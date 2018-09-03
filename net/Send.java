@@ -3,7 +3,9 @@ import java.io.*;
 import java.net.*;
 
 public class Send {
+	private String srcIp;
 	private String desIp;
+	private int srcPort;
 	private int desPort;
 	private byte[] data;
 	
@@ -20,7 +22,30 @@ public class Send {
 	public void setDesPort(int desPort) {
 		this.desPort = desPort;
 	}
+	
+	public byte[] getData() {
+		return data;
+	}
+	public void setData(byte[] data) {
+		this.data = data;
+	}
 
+	public String getSrcIp() {
+		return srcIp;
+	}
+	public void setSrcIp(String srcIp) {
+		this.srcIp = srcIp;
+	}
+	
+	public int getSrcPort() {
+		return srcPort;
+	}
+	public void setSrcPort(int srcPort) {
+		this.srcPort = srcPort;
+	}
+	
+	Send(){
+	}
 	Send(String desIp, int desPort, String data){
 		this.desIp = desIp;
 		this.desPort = desPort;

@@ -5,7 +5,7 @@ import java.net.*;
 public class Receive {
 	private String srcIp;
 	private int desPort;
-	private String data;
+	private boolean connect;
 	
 	public String getSrcIp() {
 		return srcIp;
@@ -21,26 +21,30 @@ public class Receive {
 		this.desPort = desPort;
 	}
 
-	public String getData() {
-		return data;
+	public boolean isConnect() {
+		return connect;
 	}
-	public void setData(String data) {
-		this.data = data;
+	public void setConnect(boolean connect) {
+		this.connect = connect;
 	}
-
+	
+	Receive(){
+	}
 	Receive(int desPort){
 		this.desPort = desPort;
 	}
 	
-	public void receiveData(int dataLength) throws IOException {
+	public void receiveData(String data) throws IOException {
 		DatagramSocket ds = new DatagramSocket(desPort);
-		byte[] b = new byte[dataLength];
-		DatagramPacket dp = new DatagramPacket(b, b.length);
-		
-		ds.receive(dp);
-		
-		srcIp = dp.getAddress().getHostAddress();
-		data = new String(dp.getData(), 0, dp.getData().length);
+		while(connect) {
+			byte[] b = new byte[1024];
+			DatagramPacket dp = new DatagramPacket(b, b.length);
+			
+			ds.receive(dp);
+			
+			srcIp = dp.getAddress().getHostAddress();
+			data = new String(dp.getData(), 0, dp.getData().length);
+		}
 		
 		ds.close();
 	}
