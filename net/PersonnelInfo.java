@@ -7,7 +7,7 @@ public class PersonnelInfo {
 		return InetAddress.getLocalHost().getHostName();
 	}
 	
-	public static String getLocalIp4Address() throws UnknownHostException {
+	public static String getLocalIp() throws UnknownHostException {
 		return InetAddress.getLocalHost().getHostAddress();
 	}
 }
