@@ -1,6 +1,8 @@
 # 04/09/2018
 ## ChatRoom v0.1
 Basic foncion finished, connect two user with ip address and port<br>
+Export the runnable jar file<br>
+<br>
 For some tips:<br>
 1. After set visible property of a window or its subclass, the windowListener may lose his efficacy
 2. setText("") method can reset TextComponent. In the underlying code, 
