@@ -1,17 +1,20 @@
 package net;
+
 import java.io.*;
 import java.net.*;
 
 public class Receive {
 	private String srcIp;
+	private String srcName;
 	private int desPort;
-	private boolean connect;
-	
+	private byte[] data = new byte[1024 * 8];
+
 	public String getSrcIp() {
 		return srcIp;
 	}
-	public void setSrcIp(String srcIp) {
-		this.srcIp = srcIp;
+
+	public String getSrcName() {
+		return srcName;
 	}
 
 	public int getDesPort() {
@@ -21,31 +24,24 @@ public class Receive {
 		this.desPort = desPort;
 	}
 
-	public boolean isConnect() {
-		return connect;
+	public String getData() {
+		return new String(data, 0, data.length);
 	}
-	public void setConnect(boolean connect) {
-		this.connect = connect;
-	}
-	
-	Receive(){
-	}
+
 	Receive(int desPort){
 		this.desPort = desPort;
 	}
 	
-	public void receiveData(String data) throws IOException {
+	public void rece() throws IOException {
 		DatagramSocket ds = new DatagramSocket(desPort);
-		while(connect) {
-			byte[] b = new byte[1024];
-			DatagramPacket dp = new DatagramPacket(b, b.length);
-			
-			ds.receive(dp);
-			
-			srcIp = dp.getAddress().getHostAddress();
-			data = new String(dp.getData(), 0, dp.getData().length);
-		}
+		DatagramPacket dp = new DatagramPacket(data, data.length);
+
+		ds.receive(dp);
 		
+		srcIp = dp.getAddress().getHostAddress();
+		srcName = dp.getAddress().getHostName();
+		data = dp.getData();
+
 		ds.close();
 	}
 }

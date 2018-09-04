@@ -2,12 +2,11 @@ package net;
 import java.io.*;
 import java.net.*;
 
-public class Send {
-	private String srcIp;
+public class Send implements Runnable{
 	private String desIp;
-	private int srcPort;
 	private int desPort;
 	private byte[] data;
+	private Exception e;
 	
 	public String getDesIp() {
 		return desIp;
@@ -29,34 +28,21 @@ public class Send {
 	public void setData(byte[] data) {
 		this.data = data;
 	}
-
-	public String getSrcIp() {
-		return srcIp;
-	}
-	public void setSrcIp(String srcIp) {
-		this.srcIp = srcIp;
+	
+	public Exception getE() {
+		return e;
 	}
 	
-	public int getSrcPort() {
-		return srcPort;
-	}
-	public void setSrcPort(int srcPort) {
-		this.srcPort = srcPort;
-	}
-	
-	Send(){
-	}
-	Send(String desIp, int desPort, String data){
-		this.desIp = desIp;
-		this.desPort = desPort;
-		this.data = data.getBytes();
-	}
-	
-	public void sendData() throws IOException {
-		DatagramSocket ds = new DatagramSocket();
-		DatagramPacket dp = new DatagramPacket(
-				data, data.length, InetAddress.getByName(desIp), desPort);
-		ds.send(dp);
-		ds.close();
+	public void run() {
+		try {
+			DatagramSocket ds = new DatagramSocket();
+			DatagramPacket dp = new DatagramPacket(
+					data, data.length, InetAddress.getByName(desIp), desPort);
+			ds.send(dp);
+			ds.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			this.e = e;
+		}
 	}
 }

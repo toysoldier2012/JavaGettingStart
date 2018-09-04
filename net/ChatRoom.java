@@ -2,11 +2,12 @@ package net;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.net.*;
 import java.text.*;
 import java.util.*;
 
-public class ChatRoomUI {
+public class ChatRoom {
 	private static final LayoutManager FLOWLAYOUT = new FlowLayout();
 
 	private String localName;
@@ -16,8 +17,6 @@ public class ChatRoomUI {
 	private String desIp;
 	private int desPort;
 	private String data;
-	private StringBuilder chatData =  new StringBuilder();
-	private StringBuilder connectInfoData = new StringBuilder();
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private boolean connect = false;
 	
@@ -29,7 +28,11 @@ public class ChatRoomUI {
 	private Button inputButton = new Button("Enter");
 	
 	private Dialog connectDialog = new Dialog(mainFrame, "Connect", true);
+	private Button closeWarningButton = new Button("Close");
+
 	private Dialog disconnectDialog = new Dialog(mainFrame, "Disconnect", true);
+	private Button disconnectDialogConfirm = new Button("Confirm");
+	private Button disconnectDialogCancel = new Button("Cancel");
 	
 	private TextField srcPortField = new TextField(40);
 	private TextField desIpField = new TextField(40);
@@ -37,7 +40,11 @@ public class ChatRoomUI {
 	private Button connectButton = new Button("Connect");
 	private Button cancelButton = new Button("Cancel");
 	private Dialog wrongInputWarning = new Dialog(connectDialog, "Warning", true);
-	private Dialog alreadyConnectedWarning = new Dialog(connectDialog, "Warning", true);
+	
+	private Send sendData = new Send();
+	private ReceShowData receShowData = new ReceShowData();
+	private Thread threadSend;
+	private Thread threadRece;
 	
 	private void init() {
 		mainFrame.setBounds(500, 250, 1000, 500);
@@ -59,13 +66,12 @@ public class ChatRoomUI {
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {
 				inputField.requestFocus();
-				connectInfoData.append("WELCOME TO CHATROOM"+
+				connectInfoArea.append("WELCOME TO CHATROOM"+
 						"\n\n"+ sdf.format(new Date()) +
 						"\nLocal host name is: "+ localName +
 						"\nLocal host IP4 Address is: "+ localIp +
 						"\nPlease connect!" +
 						"\n");
-				connectInfoArea.setText(connectInfoData.toString());
 			}
 			
 			public void windowActivated(WindowEvent e) {
@@ -143,11 +149,9 @@ public class ChatRoomUI {
 				connectDialog.setVisible(false);
 			}
 		});
-		
 		connectButtonInit();
 		cancelButtonInit();
 		wrongInputWarningInit();
-		alreadyConnectedWarningInit();
 	}
 
 	private void connectButtonInit() {
@@ -157,34 +161,33 @@ public class ChatRoomUI {
 					if (srcPortField.getText().isEmpty() ||
 							desIpField.getText().isEmpty() || 
 							desPortField.getText().isEmpty()) {
-						connectInfoData.append("\n"+ sdf.format(new Date()) +
+						connectInfoArea.append("\n"+ sdf.format(new Date()) +
 								"\nWrong destination IP address or Port"+
 								"\n");
-						connectInfoArea.setText(connectInfoData.toString());
 						wrongInputWarning.setVisible(true);
 					} else {
 						localPort = Integer.parseInt(srcPortField.getText());
 						desIp = desIpField.getText();
 						desPort = Integer.parseInt(desPortField.getText());
-						connectInfoData.append("\n"+ sdf.format(new Date()) +
+						connectInfoArea.append("\n"+ sdf.format(new Date()) +
 								"\nMy port is: "+ localPort +
 								"\nDestination IP address: "+ desIp +
 								"\nDestination Port: "+ desPort +
 								"\nStatus: Connected" +
 								"\n");
-						connectInfoArea.setText(connectInfoData.toString());
-						connectDialog.setVisible(false);
 						connect = true;
+						connectDialog.setVisible(false);
+						threadRece = new Thread(receShowData);
+						threadRece.start();
 					}
 					resetTextField(srcPortField);
 					resetTextField(desIpField);
 					resetTextField(desPortField);
 				} else {
-					connectInfoData.append("\n"+ sdf.format(new Date()) +
+					connectInfoArea.append("\n"+ sdf.format(new Date()) +
 							"\nYou have already connected with "+ desIp +
 							"\n");
-					connectInfoArea.setText(connectInfoData.toString());
-					alreadyConnectedWarning.setVisible(true);
+					connectDialog.setVisible(false);
 					resetTextField(srcPortField);
 					resetTextField(desIpField);
 					resetTextField(desPortField);
@@ -194,11 +197,20 @@ public class ChatRoomUI {
 		
 	}
 	
+	private void cancelButtonInit() {
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetTextField(srcPortField);
+				resetTextField(desIpField);
+				resetTextField(desPortField);
+				connectDialog.setVisible(false);
+			}
+		});
+	}
+	
 	private void wrongInputWarningInit() {
 		Label wrongInputWarningLabel = new Label(
 				"Please enter the right destination IP address and Port");
-		System.out.println("connectwarning "+connect);
-		Button closeWarningButton = new Button("Close");
 		
 		wrongInputWarning.setBounds(825, 450, 350, 120);
 		wrongInputWarning.setLayout(FLOWLAYOUT);
@@ -211,47 +223,13 @@ public class ChatRoomUI {
 			}
 		});
 		
+		closeWarningButtonInit();
+	}
+	
+	private void closeWarningButtonInit() {
 		closeWarningButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				wrongInputWarning.setVisible(false);
-			}
-		});
-	}
-	
-	private void alreadyConnectedWarningInit() {
-		Label alreadyConnectedWarningLabel = new Label(
-				"You have already connected");
-		Button closeConnectWarningButton = new Button("Close");
-		
-		alreadyConnectedWarning.setBounds(900, 450, 200, 120);
-		alreadyConnectedWarning.setLayout(FLOWLAYOUT);
-		alreadyConnectedWarning.add(alreadyConnectedWarningLabel);
-		alreadyConnectedWarning.add(closeConnectWarningButton);
-		
-		alreadyConnectedWarning.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				alreadyConnectedWarning.setVisible(false);
-				connectDialog.setVisible(false);
-
-			}
-		});
-		
-		closeConnectWarningButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				alreadyConnectedWarning.setVisible(false);
-				connectDialog.setVisible(false);
-
-			}
-		});
-	}
-
-	private void cancelButtonInit() {
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resetTextField(srcPortField);
-				resetTextField(desIpField);
-				resetTextField(desPortField);
-				connectDialog.setVisible(false);
 			}
 		});
 	}
@@ -259,9 +237,7 @@ public class ChatRoomUI {
 	private void disconnecDialogInit() {
 		disconnectDialog.setBounds(825, 450, 250, 120);
 		disconnectDialog.setLayout(FLOWLAYOUT);
-		
-		Button disconnectDialogConfirm = new Button("Confirm");
-		Button disconnectDialogCancel = new Button("Cancel");
+
 		Label disconnectDialogLabel = new Label(
 				"Do you want to interrupt connection?");
 		
@@ -272,20 +248,37 @@ public class ChatRoomUI {
 		disconnectDialog.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				disconnectDialog.setVisible(false);
-				connect = false;
 			}
 		});
+		disconnectDialogConfirmInit();
+		disconnectDialogCancelInit();
 		
+	}
+	
+	private void disconnectDialogConfirmInit() {
 		disconnectDialogConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				connectInfoData.append("\n"+ sdf.format(new Date()) +
-						"\nDisconnected from "+ desIp +
-						"\n");
-				connectInfoArea.setText(connectInfoData.toString());
-				disconnectDialog.setVisible(false);
-				connect = false;
+				if(connect) {
+					connectInfoArea.append("\n"+ sdf.format(new Date()) +
+							"\nDisconnected from "+ desIp +
+							"\n");
+					desIp = "";
+					desPort = 0;
+					threadSend.interrupt();
+					threadRece.interrupt();
+					connect = false;
+					disconnectDialog.setVisible(false);
+				} else {
+					connectInfoArea.append("\n"+ sdf.format(new Date()) +
+							"\nYou have no connection " +
+							"\n");
+					disconnectDialog.setVisible(false);
+				}
 			}
 		});
+	}
+	
+	private void disconnectDialogCancelInit() {
 		disconnectDialogCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				disconnectDialog.setVisible(false);
@@ -309,10 +302,15 @@ public class ChatRoomUI {
 			public void actionPerformed(ActionEvent e) {
 				data = inputField.getText();
 				if(!(data.equals(null) || data.isEmpty())) {
-					chatData.append(sdf.format(new Date()) +
-							"\nSend: "+ data +
-							"\n\n");
-					chatArea.setText(chatData.toString());
+					chatArea.append("\n");
+					chatArea.append(sdf.format(new Date()) +
+							"\nSend: "+ data);
+					chatArea.append("\n");
+					sendData.setDesIp(desIp);
+					sendData.setDesPort(desPort);
+					sendData.setData(data.getBytes());
+					threadSend = new Thread(sendData);
+					threadSend.start();
 					resetTextField(inputField);
 				}
 			}
@@ -320,10 +318,9 @@ public class ChatRoomUI {
 	}
 	
 	private void showThreadInfo(Exception e) {
-		connectInfoData.append(sdf.format(new Date()) +
+		connectInfoArea.append("\n"+ sdf.format(new Date()) +
 				"\n"+ e.getMessage() +
 				"\n");
-		connectInfoArea.setText(connectInfoData.toString());
 	}
 	
 	private void resetTextField(TextField tf) {
@@ -331,11 +328,30 @@ public class ChatRoomUI {
 		tf.setText("");
 	}
 	
-	ChatRoomUI() {
+	class ReceShowData implements Runnable{
+		private Receive receData;
+
+		public void run() {
+			while(true) {
+				try {
+					receData = new Receive(localPort);
+					receData.rece();
+				} catch (IOException e) {
+					showThreadInfo(e);
+				}
+				chatArea.append("\n");
+				chatArea.append(sdf.format(new Date()) +
+						"\n"+ receData.getSrcName() +": "+ receData.getData());
+				chatArea.append("\n");
+			}
+		}
+	}
+	
+	ChatRoom() {
 		init();
 	}
 	
 	public static void main(String[] args) {
-		new ChatRoomUI();
+		new ChatRoom();
 	}
 }
