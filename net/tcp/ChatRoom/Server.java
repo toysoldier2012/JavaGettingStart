@@ -1,25 +1,34 @@
-package net.tcp;
+package net.tcp.ChatRoom;
 
 import java.io.*;
 import java.net.*;
 
-public class Client{
+public class Server {
+	private ServerSocket ss;
 	private Socket s;
 	private BufferedReader socketBR;
 	private BufferedWriter socketBW;
-	private BufferedReader systemInBR;
 	
-	Client(){
-		InitClient();
+	Server(){
+		InitServer();
 	}
 	
-	public void InitClient() {
+	public void InitServer() {
 		try {
-			s = new Socket("192.168.0.20", 10010);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			ss = new ServerSocket(10010);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
+		try {
+			s = ss.accept();
+		} catch (IOException e) {
+			e.printStackTrace();
+			try {
+				ss.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 		
 		try {
@@ -28,6 +37,7 @@ public class Client{
 			e.printStackTrace();
 			try {
 				s.close();
+				ss.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -38,39 +48,35 @@ public class Client{
 			e.printStackTrace();
 			try {
 				s.close();
+				ss.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
 		
-		systemInBR = new BufferedReader(new InputStreamReader(System.in));
-		
 		String line = null;
 		
 		try {
-			while((line = systemInBR.readLine()) != null) {
-				if(line.equals("over"))
-					break;
-				socketBW.write(line);
+			while((line = socketBR.readLine()) != null) {
+				System.out.println(line);
+				socketBW.write("Got it!");
 				socketBW.newLine();
 				socketBW.flush();
-				System.out.println(socketBR.readLine());
 			}
+				
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				s.close();
-				systemInBR.close();				
-			} catch(IOException e) {
+				ss.close();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
 	public static void main(String[] args) {
-		new Client();
+		new Server();
 	}
 }
-
