@@ -13,6 +13,7 @@ public class ChatRoom {
 	private String localName;
 	private String localIp;
 	private int localPort;
+	@SuppressWarnings("unused")
 	private String desName;
 	private String desIp;
 	private int desPort;

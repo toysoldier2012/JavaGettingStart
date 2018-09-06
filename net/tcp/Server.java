@@ -3,25 +3,35 @@ package net.tcp;
 import java.io.*;
 import java.net.*;
 
-class Client{
+public class Server {
+	private ServerSocket ss;
 	private Socket s;
 	private BufferedReader socketBR;
 	private BufferedWriter socketBW;
-	private BufferedReader systemInBR;
 	
-	Client(){
-		InitClient();
+	Server(){
+		InitServer();
 	}
 	
-	public void InitClient() {
+	public void InitServer() {
 		try {
-			s = new Socket("192.168.0.20", 10010);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ss = new ServerSocket(10010);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		try {
+			s = ss.accept();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				ss.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		
 		try {
@@ -31,6 +41,7 @@ class Client{
 			e.printStackTrace();
 			try {
 				s.close();
+				ss.close();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -43,42 +54,38 @@ class Client{
 			e.printStackTrace();
 			try {
 				s.close();
+				ss.close();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 		
-		systemInBR = new BufferedReader(new InputStreamReader(System.in));
-		
 		String line = null;
 		
 		try {
-			while((line = systemInBR.readLine()) != null) {
-				if(line.equals("over"))
-					break;
-				socketBW.write(line);
+			while((line = socketBR.readLine()) != null) {
+				System.out.println(line);
+				socketBW.write("Got it!");
 				socketBW.newLine();
 				socketBW.flush();
-				System.out.println(socketBR.readLine());
 			}
+				
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				s.close();
-				systemInBR.close();				
-			} catch(IOException e) {
+				ss.close();
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
 	public static void main(String[] args) {
-		new Client();
+		new Server();
 	}
 }
-
