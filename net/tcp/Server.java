@@ -17,19 +17,16 @@ public class Server {
 		try {
 			ss = new ServerSocket(10010);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
 			s = ss.accept();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			try {
 				ss.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -37,26 +34,22 @@ public class Server {
 		try {
 			socketBR = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			try {
 				s.close();
 				ss.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 		try {
 			socketBW = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			try {
 				s.close();
 				ss.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -72,14 +65,12 @@ public class Server {
 			}
 				
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				s.close();
 				ss.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

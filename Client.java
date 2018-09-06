@@ -1,4 +1,4 @@
-package net.tcp;
+package net.tcp.ChatRoom;
 
 import java.io.*;
 import java.net.*;
