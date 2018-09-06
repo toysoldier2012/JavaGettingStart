@@ -1,3 +1,7 @@
+# 06/09/2018
+For test in WLAN, i got an error: Address already in use, because of the wrong ip address<br>
+In my laptop, there are two ip address, one is normal wlan ipv4 address, and another one is microsoft wifi direct virtual Adapter, for create a wireless Router
+
 # 04/09/2018
 ## ChatRoom v0.1
 Basic foncion finished, connect two user with ip address and port<br>

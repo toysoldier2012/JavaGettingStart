@@ -1,4 +1,4 @@
-package net;
+package net.udp;
 
 import java.io.*;
 import java.net.*;

@@ -1,4 +1,4 @@
-package net;
+package net.udp;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -98,6 +98,7 @@ public class ChatRoom {
 		MenuItem connect = new MenuItem("Connect");
 		MenuItem disconnect = new MenuItem("Disconnect");
 		MenuItem exit = new MenuItem("Exit");
+		
 		
 		menu.add(connection);
 		connection.add(connect);
