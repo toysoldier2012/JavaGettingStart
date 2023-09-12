@@ -1,4 +1,4 @@
-package com.xiaoyu;
+package com.xiaoyu.collections;
 
 import com.xiaoyu.pojo.Livre;
 import org.junit.Test;

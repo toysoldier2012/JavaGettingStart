@@ -1,6 +1,6 @@
-package com.xiaoyu;
+package com.xiaoyu.enumeration;
 
-import com.xiaoyu.base.Enum;
+import com.xiaoyu.enumeration.Enum;
 import org.junit.Test;
 
 public class TestEnum {

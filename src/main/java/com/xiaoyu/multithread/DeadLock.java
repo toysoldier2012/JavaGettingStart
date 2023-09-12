@@ -1,4 +1,4 @@
-package com.xiaoyu.avance.multithread;
+package com.xiaoyu.multithread;
 
 import java.util.concurrent.locks.ReentrantLock;
 

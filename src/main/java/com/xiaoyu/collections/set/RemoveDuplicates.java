@@ -1,9 +1,6 @@
-package com.xiaoyu.base.collections.set;
+package com.xiaoyu.collections.set;
 
-import java.sql.Array;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RemoveDuplicates {
     public static List<Integer> removeDuplicates(List<Integer> list){

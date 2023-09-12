@@ -1,4 +1,4 @@
-package com.xiaoyu.avance.multithread;
+package com.xiaoyu.multithread;
 
 public class ThreadGettingStart extends java.lang.Thread {
     @Override

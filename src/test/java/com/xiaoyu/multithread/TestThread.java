@@ -1,6 +1,6 @@
-package com.xiaoyu;
+package com.xiaoyu.multithread;
 
-import com.xiaoyu.avance.multithread.DeadLock;
+import com.xiaoyu.multithread.DeadLock;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

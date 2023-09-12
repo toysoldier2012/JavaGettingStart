@@ -1,4 +1,4 @@
-package com.xiaoyu;
+package com.xiaoyu.collections;
 
 import com.xiaoyu.oop.ClasseFille;
 import org.junit.Test;

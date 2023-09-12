@@ -1,16 +1,12 @@
-package com.xiaoyu;
+package com.xiaoyu.algorithm;
 
-import com.xiaoyu.algo.PrintAllFile;
+import com.xiaoyu.algorithm.PrintAllFile;
 import org.junit.Test;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.atomic.AtomicInteger;
 
 

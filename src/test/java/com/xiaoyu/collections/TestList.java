@@ -1,4 +1,4 @@
-package com.xiaoyu;
+package com.xiaoyu.collections;
 
 import org.junit.Test;
 

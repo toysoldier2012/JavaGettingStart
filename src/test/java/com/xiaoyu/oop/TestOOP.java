@@ -1,4 +1,4 @@
-package com.xiaoyu;
+package com.xiaoyu.oop;
 
 import com.xiaoyu.oop.AnInterface;
 import com.xiaoyu.oop.ClasseFille;

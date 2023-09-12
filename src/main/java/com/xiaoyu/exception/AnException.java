@@ -1,4 +1,4 @@
-package com.xiaoyu.base;
+package com.xiaoyu.exception;
 
 public class AnException extends RuntimeException{
     public AnException() {

@@ -1,4 +1,4 @@
-package com.xiaoyu;
+package com.xiaoyu.stream;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.xiaoyu.base.collections.table;
+package com.xiaoyu.collections.table;
 
 import java.util.HashMap;
 import java.util.Map;
