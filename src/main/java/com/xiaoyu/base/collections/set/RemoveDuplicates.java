@@ -15,7 +15,12 @@ public class RemoveDuplicates {
         char[] charArray = s.toCharArray();
         List<Character> charList = Arrays.asList(new Character[10]);
         Set<Character> charSet = new HashSet<>(charList);
+
+        StringBuilder[] sbArray = new StringBuilder[5];
+
         return charSet.size() == s.length();
+
+
     }
 
     public static void main(String[] args) {
